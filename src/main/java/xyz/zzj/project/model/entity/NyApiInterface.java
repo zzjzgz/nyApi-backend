@@ -27,7 +27,7 @@ public class NyApiInterface implements Serializable {
     /**
      * 创建人id
      */
-    private Long createUserId;
+    private Long userId;
 
     /**
      * 描述
@@ -37,12 +37,12 @@ public class NyApiInterface implements Serializable {
     /**
      * 请求地址
      */
-    private String requestUrl;
+    private String url;
 
     /**
      * 请求类型
      */
-    private String massage;
+    private String method;
 
     /**
      * 请求头

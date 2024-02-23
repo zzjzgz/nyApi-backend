@@ -31,7 +31,7 @@ import java.util.List;
  * @author zeng
  */
 @RestController
-@RequestMapping("/nyApiInterface")
+@RequestMapping("/interfaceInfo")
 @Slf4j
 public class NyApiInterfaceController {
 
@@ -60,7 +60,7 @@ public class NyApiInterfaceController {
         // 校验
         nyApiInterfaceService.validNyApiInterface(nyApiInterface, true);
         User loginUser = userService.getLoginUser(request);
-        nyApiInterface.setCreateUserId(loginUser.getId());
+        nyApiInterface.setUserId(loginUser.getId());
         boolean result = nyApiInterfaceService.save(nyApiInterface);
         if (!result) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
@@ -89,7 +89,7 @@ public class NyApiInterfaceController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 仅本人或管理员可删除
-        if (!oldNyApiInterface.getCreateUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldNyApiInterface.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         boolean b = nyApiInterfaceService.removeById(id);
@@ -121,7 +121,7 @@ public class NyApiInterfaceController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 仅本人或管理员可修改
-        if (!oldNyApiInterface.getCreateUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldNyApiInterface.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         boolean result = nyApiInterfaceService.updateById(nyApiInterface);
@@ -179,9 +179,9 @@ public class NyApiInterfaceController {
         long size = nyApiInterfaceQueryRequest.getPageSize();
         String sortField = nyApiInterfaceQueryRequest.getSortField();
         String sortOrder = nyApiInterfaceQueryRequest.getSortOrder();
-        String content = nyApiInterfaceQuery.getContent();
-        // content 需支持模糊搜索
-        nyApiInterfaceQuery.setContent(null);
+        String content = nyApiInterfaceQuery.getDescription();
+        // description 需支持模糊搜索
+        nyApiInterfaceQuery.setDescription(null);
         // 限制爬虫
         if (size > 50) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

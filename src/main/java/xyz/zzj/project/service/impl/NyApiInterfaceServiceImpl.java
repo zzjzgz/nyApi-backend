@@ -1,4 +1,5 @@
 package xyz.zzj.project.service.impl;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.ObjectUtils;
@@ -21,11 +22,32 @@ import org.springframework.stereotype.Service;
 public class NyApiInterfaceServiceImpl extends ServiceImpl<NyApiInterfaceMapper, NyApiInterface>
     implements NyApiInterfaceService{
 
+
     @Override
     public void validNyApiInterface(NyApiInterface nyApiInterface, boolean add) {
+
         if (nyApiInterface == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+         Long id = nyApiInterface.getId();
+         String name = nyApiInterface.getName();
+         Long createUserId = nyApiInterface.getUserId();
+         String description = nyApiInterface.getDescription();
+         String requestUrl = nyApiInterface.getUrl();
+         String massage = nyApiInterface.getMethod();
+         String requestHeader = nyApiInterface.getRequestHeader();
+         String responseHeader = nyApiInterface.getResponseHeader();
+         Integer status = nyApiInterface.getStatus();
+
+         if (add){
+             if (StringUtils.isAnyBlank(name,description,requestUrl,massage,requestHeader,responseHeader) || ObjectUtils.anyNull(id,createUserId,status)){
+                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+             }
+             if (StringUtils.isNotBlank(name) && name.length() > 50){
+                 throw new BusinessException(ErrorCode.PARAMS_ERROR,"名称过长");
+             }
+         }
+
     }
 }
 
