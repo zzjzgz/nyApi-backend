@@ -2,31 +2,33 @@ package xyz.zzj.project.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import xyz.zzj.nyapiclientsdk.client.NyApiClient;
 import xyz.zzj.project.annotation.AuthCheck;
-import xyz.zzj.project.common.BaseResponse;
-import xyz.zzj.project.common.DeleteRequest;
-import xyz.zzj.project.common.ErrorCode;
-import xyz.zzj.project.common.ResultUtils;
+import xyz.zzj.project.common.*;
 import xyz.zzj.project.constant.CommonConstant;
 import xyz.zzj.project.exception.BusinessException;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceAddRequest;
+import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceInvokeRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceQueryRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceUpdateRequest;
 import xyz.zzj.project.model.entity.NyApiInterface;
 import xyz.zzj.project.model.entity.User;
+import xyz.zzj.project.model.enums.InterfaceStatusEnum;
 import xyz.zzj.project.service.NyApiInterfaceService;
 import xyz.zzj.project.service.UserService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * 帖子接口
+ * api接口
  *
  * @author zeng
  */
@@ -40,6 +42,9 @@ public class NyApiInterfaceController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private NyApiClient nyApiClient;
 
     // region 增删改查
 
@@ -58,7 +63,6 @@ public class NyApiInterfaceController {
         NyApiInterface nyApiInterface = new NyApiInterface();
         BeanUtils.copyProperties(nyApiInterfaceAddRequest, nyApiInterface);
         // 校验
-        nyApiInterfaceService.validNyApiInterface(nyApiInterface, true);
         User loginUser = userService.getLoginUser(request);
         nyApiInterface.setUserId(loginUser.getId());
         boolean result = nyApiInterfaceService.save(nyApiInterface);
@@ -66,6 +70,7 @@ public class NyApiInterfaceController {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
         }
         long newNyApiInterfaceId = nyApiInterface.getId();
+        nyApiInterfaceService.validNyApiInterface(nyApiInterface, true);
         return ResultUtils.success(newNyApiInterfaceId);
     }
 
@@ -86,7 +91,9 @@ public class NyApiInterfaceController {
         // 判断是否存在
         NyApiInterface oldNyApiInterface = nyApiInterfaceService.getById(id);
         if (oldNyApiInterface == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR
+
+            );
         }
         // 仅本人或管理员可删除
         if (!oldNyApiInterface.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
@@ -194,6 +201,100 @@ public class NyApiInterfaceController {
         return ResultUtils.success(nyApiInterfacePage);
     }
 
-    // endregion
+    /**
+     * 发布接口
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineNyApiInterface(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        long id = getId(idRequest);
+        // 仅本人或管理员可修改接口状态
+        NyApiInterface nyApiInterface = new NyApiInterface();
+        nyApiInterface.setUserId(id);
+        nyApiInterface.setStatus(InterfaceStatusEnum.ONLINE.getValue());
+        boolean result = nyApiInterfaceService.updateById(nyApiInterface);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 在线调用
+     *
+     * @param invokeRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> offlineNyApiInvokeInterface(@RequestBody NyApiInterfaceInvokeRequest invokeRequest, HttpServletRequest request) {
+        if (invokeRequest == null || invokeRequest.getId() == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = invokeRequest.getId();
+        String userRequestParams = invokeRequest.getUserRequestParams();
+        //判断接口是否存在
+        NyApiInterface apiInterface = nyApiInterfaceService.getById(id);
+        if (apiInterface == null || userRequestParams == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //判断接口是否开启
+        if (apiInterface.getStatus() != InterfaceStatusEnum.ONLINE.getValue()){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        //重新生成一个nyapi的客户端，因为客户端内置了管理员的令牌
+        NyApiClient teamNyApiClient = new NyApiClient(accessKey,secretKey);
+        //解析传来的参数
+        Gson gson = new Gson();
+        xyz.zzj.nyapiclientsdk.model.User paramsUser = gson.fromJson(userRequestParams, xyz.zzj.nyapiclientsdk.model.User.class);
+        String userNameByPost = teamNyApiClient.getUserNameByPost(paramsUser);
+        return ResultUtils.success(userNameByPost);
+    }
+    /**
+     * 下线接口
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/offline")
+    public BaseResponse<Boolean> offlineNyApiInterface(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        long id = getId(idRequest);
+        // 仅本人或管理员可修改接口状态
+        NyApiInterface nyApiInterface = new NyApiInterface();
+        nyApiInterface.setUserId(id);
+        nyApiInterface.setStatus(InterfaceStatusEnum.OFFLINE.getValue());
+        boolean result = nyApiInterfaceService.updateById(nyApiInterface);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 发布和下线的公共方法
+     * @param idRequest
+     * @return
+     */
+    private long getId(IdRequest idRequest) {
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = idRequest.getId();
+        // 判断是否存在
+        NyApiInterface oldNyApiInterface = nyApiInterfaceService.getById(id);
+        if (oldNyApiInterface == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        //判断接口是否可以调用
+        xyz.zzj.nyapiclientsdk.model.User user = new xyz.zzj.nyapiclientsdk.model.User();
+        user.setUsername("zzj");
+        String userNameByPost = nyApiClient.getUserNameByPost(user);
+        if (StringUtils.isBlank(userNameByPost)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"接口验证失败");
+        }
+        return id;
+    }
 
 }

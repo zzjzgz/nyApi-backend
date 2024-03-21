@@ -5,21 +5,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 帖子审核状态枚举
+ * 帖子性别枚举
  *
  * @author zeng
  */
-public enum PostReviewStatusEnum {
+public enum InterfaceStatusEnum {
 
-    REVIEWING("待审核", 0),
-    PASS("通过", 1),
-    REJECT("拒绝", 2);
+    OFFLINE("下线", 1),
+    ONLINE("发布", 0);
 
     private final String text;
 
     private final int value;
 
-    PostReviewStatusEnum(String text, int value) {
+    InterfaceStatusEnum(String text, int value) {
         this.text = text;
         this.value = value;
     }

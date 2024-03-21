@@ -44,6 +44,12 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
+        <!--        API-SDK-->
+        <dependency>
+            <groupId>xyz.zzj</groupId>
+            <artifactId>nyApi-client-sdk</artifactId>
+            <version>0.0.2</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

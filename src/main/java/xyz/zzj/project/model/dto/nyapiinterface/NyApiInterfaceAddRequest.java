@@ -26,13 +26,16 @@ public class NyApiInterfaceAddRequest implements Serializable {
     /**
      * 请求地址
      */
-    private String requestUrl;
+    private String url;
 
     /**
      * 请求类型
      */
-    private String massage;
-
+    private String method;
+    /**
+     * 请求参数
+     */
+    private String requestParams;
     /**
      * 请求头
      */

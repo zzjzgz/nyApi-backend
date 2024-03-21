@@ -1,5 +1,4 @@
 package xyz.zzj.project.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.ObjectUtils;
@@ -7,8 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import xyz.zzj.project.common.ErrorCode;
 import xyz.zzj.project.exception.BusinessException;
 import xyz.zzj.project.model.entity.NyApiInterface;
-import xyz.zzj.project.model.enums.PostGenderEnum;
-import xyz.zzj.project.model.enums.PostReviewStatusEnum;
 import xyz.zzj.project.service.NyApiInterfaceService;
 import xyz.zzj.project.mapper.NyApiInterfaceMapper;
 import org.springframework.stereotype.Service;
@@ -33,14 +30,16 @@ public class NyApiInterfaceServiceImpl extends ServiceImpl<NyApiInterfaceMapper,
          String name = nyApiInterface.getName();
          Long createUserId = nyApiInterface.getUserId();
          String description = nyApiInterface.getDescription();
-         String requestUrl = nyApiInterface.getUrl();
-         String massage = nyApiInterface.getMethod();
+         String url = nyApiInterface.getUrl();
+         String method = nyApiInterface.getMethod();
          String requestHeader = nyApiInterface.getRequestHeader();
          String responseHeader = nyApiInterface.getResponseHeader();
-         Integer status = nyApiInterface.getStatus();
+         String requestParams = nyApiInterface.getRequestParams();
+//         Integer status = nyApiInterface.getStatus();
 
          if (add){
-             if (StringUtils.isAnyBlank(name,description,requestUrl,massage,requestHeader,responseHeader) || ObjectUtils.anyNull(id,createUserId,status)){
+             //当有参数为空时，返回异常
+             if (StringUtils.isAnyBlank(name,description,url,method,requestHeader,responseHeader,requestParams) || ObjectUtils.anyNull(id,createUserId)){
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
              }
              if (StringUtils.isNotBlank(name) && name.length() > 50){

@@ -1,17 +1,18 @@
-package xyz.zzj.project.model.entity;
+package xyz.zzj.nyapiinterface.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * 用户
- *
  * @TableName user
  */
-@TableName(value = "user")
+@TableName(value ="user")
 @Data
 public class User implements Serializable {
     /**
@@ -41,7 +42,7 @@ public class User implements Serializable {
     private Integer gender;
 
     /**
-     * 用户角色: user, admin
+     * 用户角色：user / admin
      */
     private String userRole;
 
@@ -49,15 +50,6 @@ public class User implements Serializable {
      * 密码
      */
     private String userPassword;
-    /**
-     * 签名 accessKey
-     */
-    private String accessKey;
-    /**
-     * 签名 secretKey
-     */
-    private String secretKey;
-
 
     /**
      * 创建时间
@@ -72,8 +64,17 @@ public class User implements Serializable {
     /**
      * 是否删除
      */
-    @TableLogic
     private Integer isDelete;
+
+    /**
+     * accessKey
+     */
+    private String accessKey;
+
+    /**
+     * secretKey
+     */
+    private String secretKey;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -2,7 +2,6 @@ package xyz.zzj.project.service;
 
 import xyz.zzj.project.model.entity.NyApiInterface;
 import com.baomidou.mybatisplus.extension.service.IService;
-import xyz.zzj.project.model.entity.Post;
 
 /**
 * @author zeng
