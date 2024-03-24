@@ -35,8 +35,6 @@ public class NyApiInterfaceServiceImpl extends ServiceImpl<NyApiInterfaceMapper,
          String requestHeader = nyApiInterface.getRequestHeader();
          String responseHeader = nyApiInterface.getResponseHeader();
          String requestParams = nyApiInterface.getRequestParams();
-//         Integer status = nyApiInterface.getStatus();
-
          if (add){
              //当有参数为空时，返回异常
              if (StringUtils.isAnyBlank(name,description,url,method,requestHeader,responseHeader,requestParams) || ObjectUtils.anyNull(id,createUserId)){
