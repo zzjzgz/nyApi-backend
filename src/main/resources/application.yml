@@ -35,5 +35,14 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 nyapi:
   client:
-    secret-key: nianyan
-    access-key: qwertyuiop
+    secret-key: xxxxx
+    access-key: xxxxx
+dubbo:
+  application:
+    name: dubbo-springboot-demo-provider
+  protocol:
+    name: dubbo
+    port: 20880
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848

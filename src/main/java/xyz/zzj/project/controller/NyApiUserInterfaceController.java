@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-import xyz.zzj.nyapiclientsdk.client.NyApiClient;
+import xyz.zzj.common.model.entity.NyApiUserInterface;
+import xyz.zzj.common.model.entity.User;
 import xyz.zzj.project.annotation.AuthCheck;
 import xyz.zzj.project.common.BaseResponse;
 import xyz.zzj.project.common.DeleteRequest;
@@ -18,8 +19,6 @@ import xyz.zzj.project.exception.BusinessException;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceAddRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceUpdateRequest;
 import xyz.zzj.project.model.dto.nyapiuserinterface.NyApiUserInterfaceQueryRequest;
-import xyz.zzj.project.model.entity.NyApiUserInterface;
-import xyz.zzj.project.model.entity.User;
 import xyz.zzj.project.service.NyApiUserInterfaceService;
 import xyz.zzj.project.service.UserService;
 

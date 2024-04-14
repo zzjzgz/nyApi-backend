@@ -1,7 +1,7 @@
 package xyz.zzj.project.mapper;
 
-import xyz.zzj.project.model.entity.NyApiInterface;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import xyz.zzj.common.model.entity.NyApiInterface;
 
 /**
 * @author zeng

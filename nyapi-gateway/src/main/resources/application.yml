@@ -1,0 +1,50 @@
+server:
+  port: 8091
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - AddResponseHeader=source,zzj
+      routes:
+        - id: after_route
+          uri: http://localhost:8123
+          predicates:
+            - Path=/api/**
+  main:
+    web-application-type: reactive
+
+
+
+
+#        - id: after_route
+#          uri: http://localhost:8123
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - AddRequestHeader=zzj,swag
+#            - AddRequestParameter=name,zzj
+#            - name: CircuitBreaker
+#              args:
+#                name: myCircuitBreaker
+#                fallbackUri: forward:/fallback
+##                 失效后跳转到下面这个链接
+#        - id: zzj-fallback
+#          uri: https://www.baidu.com
+#          predicates:
+#          - Path=/fallback
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace
+dubbo:
+  application:
+    name: dubbo-springboot-demo-provider
+  protocol:
+    name: dubbo
+    port: 20880
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848

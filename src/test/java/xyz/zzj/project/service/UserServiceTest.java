@@ -1,6 +1,5 @@
 package xyz.zzj.project.service;
 
-import xyz.zzj.project.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

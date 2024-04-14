@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import xyz.zzj.common.model.entity.NyApiInterface;
+import xyz.zzj.common.model.entity.User;
 import xyz.zzj.nyapiclientsdk.client.NyApiClient;
 import xyz.zzj.project.annotation.AuthCheck;
 import xyz.zzj.project.common.*;
@@ -16,8 +18,6 @@ import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceAddRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceInvokeRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceQueryRequest;
 import xyz.zzj.project.model.dto.nyapiinterface.NyApiInterfaceUpdateRequest;
-import xyz.zzj.project.model.entity.NyApiInterface;
-import xyz.zzj.project.model.entity.User;
 import xyz.zzj.project.model.enums.InterfaceStatusEnum;
 import xyz.zzj.project.service.NyApiInterfaceService;
 import xyz.zzj.project.service.UserService;
@@ -25,7 +25,6 @@ import xyz.zzj.project.service.UserService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * api接口

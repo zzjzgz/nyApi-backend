@@ -1,10 +1,10 @@
-package xyz.zzj.project.model.entity;
+package xyz.zzj.common.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户接口关系表

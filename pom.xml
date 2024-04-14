@@ -50,6 +50,12 @@
             <artifactId>nyApi-client-sdk</artifactId>
             <version>0.0.2</version>
         </dependency>
+<!--        common-sdk-->
+        <dependency>
+            <groupId>xyz.zzj</groupId>
+            <artifactId>nyApi-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -68,6 +74,23 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>3.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <!--        https://github.com/redisson/redisson?tab=readme-ov-file#quick-start-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.26.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

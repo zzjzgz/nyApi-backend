@@ -1,7 +1,9 @@
 package xyz.zzj.project.service;
 
-import xyz.zzj.project.model.entity.NyApiUserInterface;
+
 import com.baomidou.mybatisplus.extension.service.IService;
+import xyz.zzj.common.model.entity.NyApiUserInterface;
+
 
 /**
 * @author zengz
@@ -11,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface NyApiUserInterfaceService extends IService<NyApiUserInterface> {
 
     void validNyApiUserInterface(NyApiUserInterface nyApiUserInterface, boolean add);
+
+
+
+
+    boolean invokeCount(long interfaceInfoId,long userId);
+
+
 }

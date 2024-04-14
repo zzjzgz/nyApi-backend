@@ -1,7 +1,11 @@
 package xyz.zzj.project.mapper;
 
-import xyz.zzj.project.model.entity.NyApiUserInterface;
+
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import xyz.zzj.common.model.entity.NyApiUserInterface;
+
+import java.util.List;
 
 /**
 * @author zengz
@@ -10,7 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity xyz.zzj.project.model.entity.NyApiUserInterface
 */
 public interface NyApiUserInterfaceMapper extends BaseMapper<NyApiUserInterface> {
-
+//    select interfaceId,sum(totalNum) as num
+//    from ny_api_user_interface
+//    group by interfaceId order by totalNum desc
+//    limit 5;
+    List<NyApiUserInterface> listTopInvokeInterfaceInfo(int limit);
 }
 
 
